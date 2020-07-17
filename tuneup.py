@@ -11,15 +11,29 @@ import cProfile
 import pstats
 import functools
 import timeit
+import re
 
 
 def profile(func):
     """A cProfile decorator function that can be used to
     measure performance.
     """
-    # Be sure to review the lesson material on decorators.
-    # You need to understand how they are constructed and used.
-    raise NotImplementedError("Complete this decorator function")
+
+    # ------- inner function
+    def performance_measurement(*args, **kwargs):
+        pr = cProfile.Profile()
+        pr.enable()
+        results = func(*args, **kwargs)
+        pr.disable()
+        stats = pstats.Stats(pr).sort_stats('cumulative')
+        stats.print_stats()
+        return results
+    return performance_measurement
+
+
+# Be sure to review the lesson material on decorators.
+# You need to understand how they are constructed and used.
+# raise NotImplementedError("Complete this decorator function")
 
 
 def read_movies(src):
@@ -29,23 +43,26 @@ def read_movies(src):
         return f.read().splitlines()
 
 
-def is_duplicate(title, movies):
-    """Returns True if title is within movies list."""
-    for movie in movies:
-        if movie.lower() == title.lower():
-            return True
-    return False
+# def is_duplicate(title, movies):
+#     """Returns True if title is within movies list."""
+#     for movie in movies:
+#         if movie.lower() == title.lower():
+#             return True
+#     return False
 
 
+@profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list."""
     movies = read_movies(src)
     duplicates = []
-    while movies:
-        movie = movies.pop()
-        if is_duplicate(movie, movies):
+    for movie in movies:
+        if movies.count(movie) == 2:
             duplicates.append(movie)
+    duplicates = list(dict.fromkeys(duplicates))
     return duplicates
+
+# if is_duplicate(movie, movies):
 
 
 def timeit_helper():
