@@ -5,7 +5,7 @@
 Use the timeit and cProfile libraries to find bad code.
 """
 
-__author__ = "Areiahna Cooks, https://stackoverflow.com/questions/19010793/how-to-use-timeit-when-timing-a-function"
+__author__ = "Areiahna Cooks, Facilitator JT, https://stackoverflow.com/questions/19010793/how-to-use-timeit-when-timing-a-function, https://www.w3schools.com/python/python_howto_remove_duplicates.asp"
 
 import cProfile
 import pstats
