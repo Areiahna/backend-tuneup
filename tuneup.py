@@ -5,13 +5,13 @@
 Use the timeit and cProfile libraries to find bad code.
 """
 
-__author__ = "Areiahna Cooks, Facilitator JT, SE Coach Ybrayym, https://stackoverflow.com/questions/19010793/how-to-use-timeit-when-timing-a-function, https://www.w3schools.com/python/python_howto_remove_duplicates.asp"
-
-import cProfile
-import pstats
-import functools
 import timeit
-import re
+import pstats
+import cProfile
+
+__author__ = "Areiahna Cooks, Facilitator JT, SE Coach Ybrayym"
+"shorturl.at/gnuMV"
+"https://www.w3schools.com/python/python_howto_remove_duplicates.asp"
 
 
 def profile(func):
