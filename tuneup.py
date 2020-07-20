@@ -5,7 +5,7 @@
 Use the timeit and cProfile libraries to find bad code.
 """
 
-__author__ = "Areiahna Cooks, Facilitator JT, https://stackoverflow.com/questions/19010793/how-to-use-timeit-when-timing-a-function, https://www.w3schools.com/python/python_howto_remove_duplicates.asp"
+__author__ = "Areiahna Cooks, Facilitator JT, SE Coach Ybrayym, https://stackoverflow.com/questions/19010793/how-to-use-timeit-when-timing-a-function, https://www.w3schools.com/python/python_howto_remove_duplicates.asp"
 
 import cProfile
 import pstats
@@ -18,8 +18,6 @@ def profile(func):
     """A cProfile decorator function that can be used to
     measure performance.
     """
-
-    # ------- inner function
     def performance_measurement(*args, **kwargs):
         pr = cProfile.Profile()
         pr.enable()
@@ -31,11 +29,6 @@ def profile(func):
     return performance_measurement
 
 
-# Be sure to review the lesson material on decorators.
-# You need to understand how they are constructed and used.
-# raise NotImplementedError("Complete this decorator function")
-
-
 def read_movies(src):
     """Returns a list of movie titles."""
     print(f'Reading file: {src}')
@@ -43,41 +36,26 @@ def read_movies(src):
         return f.read().splitlines()
 
 
-# def is_duplicate(title, movies):
-#     """Returns True if title is within movies list."""
-#     for movie in movies:
-#         if movie.lower() == title.lower():
-#             return True
-#     return False
-
-
 @profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list."""
     movies = read_movies(src)
-    duplicates = []
-    for movie in movies:
-        if movies.count(movie) == 2:
-            duplicates.append(movie)
-    duplicates = list(dict.fromkeys(duplicates))
+    movies = [movie.lower() for movie in movies]
+    movies.sort()
+    duplicates = [movie1 for movie1, movie2 in zip(
+        movies[:-1], movies[1:])if movie1 == movie2]
     return duplicates
-
-# if is_duplicate(movie, movies):
 
 
 def timeit_helper():
     """Part A: Obtain some profiling measurements using timeit."""
-    t = timeit.Timer('main()', 'from __main__ import main')
-    averages = t.repeat(repeat=7, number=3)
-    minimun = 0
-    big = 0
-    for average in averages:
-        if average > big:
-            big = average
-        else:
-            minimun = average
+    t = timeit.Timer(stmt='find_duplicate_movies("movies.txt")',
+                     setup='from __main__ import find_duplicate_movies')
+    total_repeats = t.repeat(repeat=7, number=3)
 
-    print(f'Best time across 7 repeats of 3 runs per repeat: {minimun}')
+    average = min(total_repeats)/float(3)
+
+    return f'Best time across 7 repeats of 3 runs per repeat: {average}'
 
 
 def main():
@@ -85,6 +63,7 @@ def main():
     result = find_duplicate_movies('movies.txt')
     print(f'Found {len(result)} duplicate movies:')
     print('\n'.join(result))
+    print(timeit_helper())
 
 
 if __name__ == '__main__':
